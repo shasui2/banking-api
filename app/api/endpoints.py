@@ -1,5 +1,7 @@
 from flask_restful import Resource, reqparse
-import sqlite3
+from app.database.database_helper import DbHelper
+import datetime
+
 
 # Given a client makes a deposit of 1000 on 10-01-2012
 # And a deposit of 2000 on 13-01-2012
@@ -28,24 +30,19 @@ class Deposit(Resource):
                         help='This field cannot be empty.')
 
     def post(self):
-        global balance
-
         amount = Deposit.parse_args()
 
         if amount is None:
             return {'error': 'Amount is None'}, 400
 
         transaction_date = datetime.datetime.now().strftime('%d/%m/%Y')
-        balance += amount["amount"]
-        transaction_history.append({'date': transaction_date,
-                                    'credit': amount,
-                                    'new_balance': balance})
 
-        return {'accounts': accounts}
+        new_balance = DbHelper.update_balance(amount["amount"], credit=True)
+        query = "INSERT INTO transaction_history (date, credit) VALUES (?, ?, ?)"
+        transaction = DbHelper.query(query, date=transaction_date, credit=amount["amount"], balance=new_balance)
 
-    def deposit_to_db(self):
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
+        return transaction
+
 
 class Withdraw(Resource):
     parser = reqparse.RequestParser()
@@ -63,13 +60,13 @@ class Withdraw(Resource):
             return {'error': 'Amount is None'}, 400
 
         transaction_date = datetime.datetime.now().strftime('%d/%m/%Y')
-        balance += amount["amount"]
-        transaction_history.append({'date': transaction_date,
-                                    'debit': amount,
-                                    'balance': balance})
-        return {'accounts': accounts}
+        new_balance = DbHelper.update_balance(amount["amount"], credit=False)
+        query = "INSERT INTO transaction_history (date, credit) VALUES (?, ?, ?)"
+        transaction = DbHelper.query(query, date=transaction_date, credit=amount["amount"], balance=new_balance)
+
+        return transaction
 
 
 class Account(Resource):
     def get(self):
-        return {'accounts': accounts, 'transaction_history': transaction_history}
+        DbHelper.query("SELECT * FROM transaction_history")
