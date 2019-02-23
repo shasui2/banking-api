@@ -10,6 +10,14 @@ class DbHelper:
         return {"date": date, "credit": credit, "debit": debit, "balance": balance}
 
     @staticmethod
+    def get_balance(query):
+        connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
+        balance = cursor.execute(query)
+        print("QUERY: " + str(balance.fetchone()))
+        return {"balance": balance}
+
+    @staticmethod
     def update_balance(amount, credit=True):
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()

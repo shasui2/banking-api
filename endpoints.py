@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from app.database.database_helper import DbHelper
+from database_helper import DbHelper
 import datetime
 
 
@@ -35,6 +35,8 @@ class Deposit(Resource):
         if amount is None:
             return {'error': 'Amount is None'}, 400
 
+        print("AMOUNT: " + str(amount))
+
         transaction_date = datetime.datetime.now().strftime('%d/%m/%Y')
 
         new_balance = DbHelper.update_balance(amount["amount"], credit=True)
@@ -69,4 +71,4 @@ class Withdraw(Resource):
 
 class Account(Resource):
     def get(self):
-        DbHelper.query("SELECT * FROM transaction_history")
+        DbHelper.get_balance("SELECT * FROM transaction_history")
