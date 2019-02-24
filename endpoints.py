@@ -30,18 +30,18 @@ class Deposit(Resource):
                         help='This field cannot be empty.')
 
     def post(self):
-        amount = Deposit.parse_args()
+        amount = Deposit.parser.parse_args()
 
+        print("AMOUNT: " + str(amount))
         if amount is None:
             return {'error': 'Amount is None'}, 400
 
         print("AMOUNT: " + str(amount))
 
-        transaction_date = datetime.datetime.now().strftime('%d/%m/%Y')
+        transaction_date = datetime.datetime.now().strftime('%Y-%m-%d')
 
         new_balance = DbHelper.update_balance(amount["amount"], credit=True)
-        query = "INSERT INTO transaction_history (date, credit) VALUES (?, ?, ?)"
-        transaction = DbHelper.query(query, date=transaction_date, credit=amount["amount"], balance=new_balance)
+        transaction = DbHelper.deposit(date=transaction_date, credit=amount["amount"], balance=new_balance)
 
         return transaction
 
@@ -56,7 +56,7 @@ class Withdraw(Resource):
     def post(self):
         global balance
 
-        amount = Withdraw.parse_args()
+        amount = Withdraw.parser.parse_args()
 
         if amount is None:
             return {'error': 'Amount is None'}, 400
@@ -71,4 +71,4 @@ class Withdraw(Resource):
 
 class Account(Resource):
     def get(self):
-        DbHelper.get_balance("SELECT * FROM transaction_history")
+        return DbHelper.get_balance("SELECT * FROM account")
