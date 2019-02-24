@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from database_helper import DbHelper
+from database_helper import DBHelper
 import datetime
 
 
@@ -21,8 +21,6 @@ import datetime
 # POST   /deposit
 
 class Deposit(Resource):
-    TABLE_NAME = 'transaction_history'
-
     parser = reqparse.RequestParser()
     parser.add_argument('amount',
                         type=float,
@@ -38,10 +36,11 @@ class Deposit(Resource):
 
         print("AMOUNT: " + str(amount))
 
-        transaction_date = datetime.datetime.now().strftime('%Y-%m-%d')
+        date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        transaction_date = datetime.datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
 
-        new_balance = DbHelper.update_balance(amount["amount"], credit=True)
-        transaction = DbHelper.deposit(date=transaction_date, credit=amount["amount"], balance=new_balance)
+        new_balance = DBHelper.update_balance(amount["amount"], credit=True)
+        transaction = DBHelper.deposit(date=transaction_date, credit=amount["amount"], balance=new_balance)
 
         return transaction
 
@@ -61,14 +60,15 @@ class Withdraw(Resource):
         if amount is None:
             return {'error': 'Amount is None'}, 400
 
-        transaction_date = datetime.datetime.now().strftime('%d/%m/%Y')
-        new_balance = DbHelper.update_balance(amount["amount"], credit=False)
-        query = "INSERT INTO transaction_history (date, credit) VALUES (?, ?, ?)"
-        transaction = DbHelper.query(query, date=transaction_date, credit=amount["amount"], balance=new_balance)
+        date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        transaction_date = datetime.datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
+
+        new_balance = DBHelper.update_balance(amount["amount"], credit=False)
+        transaction = DBHelper.withdraw(date=transaction_date, debit=amount["amount"], balance=new_balance)
 
         return transaction
 
 
 class Account(Resource):
     def get(self):
-        return DbHelper.get_balance("SELECT * FROM account")
+        return DBHelper.get_balance()

@@ -1,47 +1,51 @@
 import sqlite3
 
 
-class DbHelper:
+class DBHelper:
+
     @staticmethod
-    def query(query, date=None, credit=None, debit=None, balance=None):
+    def insert(query):
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
-        cursor.execute(query, (date, credit, debit, balance))
-        return {"date": date, "credit": credit, "debit": debit, "balance": balance}
+        result = cursor.execute(query)
+        connection.commit()
+        connection.close()
+        return result
+
+    @staticmethod
+    def query(query):
+        connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
+        result = cursor.execute(query)
+        return result
 
     @staticmethod
     def deposit(date=None, credit=None, balance=None):
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-        query = "INSERT INTO transaction_history (date, credit, balance) VALUES ({0}, {1}, {2})".format(date, credit, balance)
-        cursor.execute(query)
-        connection.commit()
-        connection.close()
+        DBHelper.insert(
+            "INSERT INTO transaction_history (date, credit, balance) VALUES ('{0}', {1}, {2})".format(date, credit,
+                                                                                                      balance))
 
     @staticmethod
-    def get_balance(query):
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-        balance = cursor.execute(query)
-        print("QUERY: " + str(cursor.execute("SELECT balance FROM account").fetchone()))
-        connection.commit()
-        connection.close()
-        return {"balance": balance.fetchone()}
+    def withdraw(date=None, debit=None, balance=None):
+        DBHelper.insert(
+            "INSERT INTO transaction_history (date, debit, balance) VALUES ('{0}', {1}, {2})".format(date, debit,
+                                                                                                     balance))
+
+    @staticmethod
+    def get_balance():
+        balance = DBHelper.query("select balance from account").fetchone()[0]
+        return float("{0:.2f}".format(balance))
 
     @staticmethod
     def update_balance(amount, credit=True):
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-        balance = float(cursor.execute("select balance from account").fetchone()[0])
-        connection.commit()
+        balance = DBHelper.get_balance()
         if credit:
-            print(str(balance) + str(amount))
             balance += amount
-            cursor.execute("UPDATE account SET balance={0}".format(balance))
-            connection.commit()
+            float("{0:.2f}".format(balance))
+            DBHelper.insert("UPDATE account SET balance={0}".format(balance))
             return balance
         else:
             balance -= amount
-            cursor.execute("UPDATE account SET balance={0}".format(balance))
-            connection.commit()
+            float("{0:.2f}".format(balance))
+            DBHelper.insert("UPDATE account SET balance={0}".format(balance))
             return balance
