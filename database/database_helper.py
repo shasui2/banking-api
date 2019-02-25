@@ -8,7 +8,10 @@ class DBHelper:
     def insert(query):
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
-        result = cursor.execute(query)
+        try:
+            result = cursor.execute(query)
+        except:
+            return {'error': 'An error occurred inserting the item.'}, 500
         connection.commit()
         connection.close()
         return result

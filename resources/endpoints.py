@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from database_helper import DBHelper
+from database.database_helper import DBHelper
 
 
 class Account(Resource):
