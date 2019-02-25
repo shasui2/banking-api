@@ -1,0 +1,102 @@
+# https://tavern.readthedocs.io/en/latest/examples.html
+---
+test_name: Test case to check account endpoint.
+
+stages:
+  - name: Get balance
+
+    # Request
+    request:
+      url: http://127.0.0.1:5000/account
+      method: GET
+
+    # Expected response code and body
+    response:
+      status_code: 200
+      body:
+        balance: !anyfloat
+
+---
+test_name: Check deposit endpoint
+
+stages:
+  - name: Inavlid payload
+
+    # Request
+    request:
+      url: http://127.0.0.1:5000/deposit
+      method: POST
+      json:
+        amont: 10
+
+    # Expected response code and body
+    response:
+      status_code: 400
+      body:
+        message:
+          amount: 'Incorrect field name, type or resource (JSON) format.'
+
+  - name: Valid payload
+
+    # Request
+    request:
+      url: http://127.0.0.1:5000/deposit
+      method: POST
+      json:
+        amount: 10
+
+    # Expected response code and body
+    response:
+      status_code: 200
+      body:
+        new_balance: !anyfloat
+
+---
+test_name: Check withdrawal endpoint
+
+stages:
+  - name: Inavlid payload
+
+    # Request
+    request:
+      url: http://127.0.0.1:5000/withdraw
+      method: POST
+      json:
+        amont: 10
+
+    # Expected response code and body
+    response:
+      status_code: 400
+      body:
+        message:
+          amount: 'Incorrect field name, type or resource (JSON) format.'
+
+  - name: Valid payload
+
+    # Request
+    request:
+      url: http://127.0.0.1:5000/deposit
+      method: POST
+      json:
+        amount: 10
+
+    # Expected response code and body
+    response:
+      status_code: 200
+      body:
+        new_balance: !anyfloat
+
+---
+test_name: Check transactions endpoint
+
+stages:
+  - name: Status 200 for transaction endpoint
+
+    # Request
+    request:
+      url: http://127.0.0.1:5000/transactions
+      method: GET
+
+    # Expected response code and body
+    response:
+      status_code: 200
