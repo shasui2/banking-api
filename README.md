@@ -1,5 +1,3 @@
-<h2 align="center"> Cloud Engineer Tech Exercise </h2>
-
 ## Python Bank App
 #### Overview
 Create a bank app which satisfies the following acceptance criteria:
