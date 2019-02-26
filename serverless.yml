@@ -1,29 +1,77 @@
-# serverless.yml
 service: banking-app
 
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: python3.7
   stage: dev
   region: eu-west-2
-  memorySize: 512
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
+  dynamodb:
+    start:
+      port: 8000
+      migrate: true
+      inMemory: true
+      onStart: true
 
 functions:
-  bankFunc:
-    handler: app.py
+  account:
+    handler: serverless_endpoints/account.handler
     events:
       - http:
           path: /account
           method: get
+  withdraw:
+    handler: serverless_endpoints/withdraw.handler
+    events:
       - http:
           path: /withdraw
           method: post
+  deposit:
+    handler: serverless_endpoints/deposit.handler
+    events:
       - http:
           path: /deposit
           method: post
+  transactions:
+    handler: serverless_endpoints/transactions.handler
+    events:
       - http:
           path: /transactions
           method: get
 
+resources:
+  Resources:
+    AccountTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: "AccountTable"
+        AttributeDefinitions:
+          - AttributeName: balance
+            AttributeType: N
+        KeySchema:
+          - AttributeName: balance
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    TransactionsTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: "TransactionsTable"
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
 plugins:
   - serverless-offline
+  - serverless-python-requirements
+  - serverless-dynamodb-local

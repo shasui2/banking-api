@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_restful import Api
-from resources.endpoints import Deposit, Withdraw, Account, Transactions
+from flask_endpoints.endpoints import Deposit, Withdraw, Account, Transactions
 
 app = Flask(__name__)
 api = Api(app)

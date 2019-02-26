@@ -13,17 +13,16 @@ date || credit || debit || balance
 10/01/2012 || 1000.00 || || 1000.00
 ```
 
-#### Pre-requisites
+#### Flask Api Pre-requisites
 ```
 pip install flask
 pip install flask-restful
 ```
 
-#### Some of the tools in use:
-- AWS https://aws.amazon.com/  (EC2, S3, RDS, Lambda, DynamoDB)
-- Cloudformation https://aws.amazon.com/cloudformation/
-- Python https://www.python.org/
-- Docker https://www.docker.com/
-- Ansible http://docs.ansible.com/
-- Serverless https://serverless.com/
 
+#### Serverless Pre-requisites
+```
+npm install serverless-offline --save-dev
+npm install --save serverless-dynamodb-local@0.2.35
+sls dynamodb install
+```
