@@ -1,7 +1,6 @@
 import sqlite3
 
-connection = sqlite3.connect('data.db')
-
+connection = sqlite3.connect('database/data.db')
 cursor = connection.cursor()
 
 create_table = "CREATE TABLE IF NOT EXISTS account (balance float DEFAULT (0.00) PRIMARY KEY)"
@@ -16,8 +15,7 @@ create_table = ("CREATE TABLE IF NOT EXISTS transaction_history ("
                 "FOREIGN KEY (balance) REFERENCES account (balance))"
                 )
 cursor.execute(create_table)
-
+connection.commit()
 cursor.execute("INSERT INTO account (balance) VALUES (0.00)")
-
 connection.commit()
 connection.close()

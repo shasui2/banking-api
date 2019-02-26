@@ -8,6 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+RUN rm -f database/data.db
 RUN python database/create_table.py
 
 EXPOSE 5000

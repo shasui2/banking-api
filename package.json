@@ -1,0 +1,30 @@
+{
+  "name": "banking-api",
+  "version": "1.0.0",
+  "description": "A bank app",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "serverless-dynamodb-local": "^0.2.35"
+  },
+  "devDependencies": {
+    "serverless-offline": "^4.7.0",
+    "serverless-python-requirements": "^4.3.0"
+  },
+  "scripts": {
+    "dev": "sls offline start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shasui2/banking-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shasui2/banking-api/issues"
+  },
+  "homepage": "https://github.com/shasui2/banking-api#readme"
+}
