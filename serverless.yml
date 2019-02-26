@@ -1,0 +1,29 @@
+# serverless.yml
+service: banking-app
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: dev
+  region: eu-west-2
+  memorySize: 512
+
+functions:
+  bankFunc:
+    handler: app.py
+    events:
+      - http:
+          path: /account
+          method: get
+      - http:
+          path: /withdraw
+          method: post
+      - http:
+          path: /deposit
+          method: post
+      - http:
+          path: /transactions
+          method: get
+
+plugins:
+  - serverless-offline

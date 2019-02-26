@@ -6,7 +6,7 @@ class DBHelper:
 
     @staticmethod
     def insert(query):
-        connection = sqlite3.connect('data.db')
+        connection = sqlite3.connect('database/data.db')
         cursor = connection.cursor()
         try:
             result = cursor.execute(query)
@@ -18,7 +18,7 @@ class DBHelper:
 
     @staticmethod
     def query(query):
-        connection = sqlite3.connect('data.db')
+        connection = sqlite3.connect('database/data.db')
         cursor = connection.cursor()
         result = cursor.execute(query)
         return result

@@ -32,7 +32,7 @@ class Withdraw(Resource):
     parser.add_argument('amount',
                         type=float,
                         required=True,
-                        help='This field cannot be empty.')
+                        help='Incorrect field name, type or resource (JSON) format.')
 
     def post(self):
         amount = Withdraw.parser.parse_args()

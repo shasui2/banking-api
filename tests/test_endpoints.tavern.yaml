@@ -1,13 +1,13 @@
 # https://tavern.readthedocs.io/en/latest/examples.html
 ---
-test_name: Test case to check account endpoint.
+test_name: Check account endpoint.
 
 stages:
   - name: Get balance
 
     # Request
     request:
-      url: http://127.0.0.1:5000/account
+      url: http://localhost:5000/account
       method: GET
 
     # Expected response code and body
@@ -24,7 +24,7 @@ stages:
 
     # Request
     request:
-      url: http://127.0.0.1:5000/deposit
+      url: http://localhost:5000/deposit
       method: POST
       json:
         amont: 10
@@ -40,7 +40,7 @@ stages:
 
     # Request
     request:
-      url: http://127.0.0.1:5000/deposit
+      url: http://localhost:5000/deposit
       method: POST
       json:
         amount: 10
@@ -52,14 +52,14 @@ stages:
         new_balance: !anyfloat
 
 ---
-test_name: Check withdrawal endpoint
+test_name: Check withdraw endpoint
 
 stages:
   - name: Inavlid payload
 
     # Request
     request:
-      url: http://127.0.0.1:5000/withdraw
+      url: http://localhost:5000/withdraw
       method: POST
       json:
         amont: 10
@@ -75,7 +75,7 @@ stages:
 
     # Request
     request:
-      url: http://127.0.0.1:5000/deposit
+      url: http://localhost:5000/deposit
       method: POST
       json:
         amount: 10
@@ -85,6 +85,21 @@ stages:
       status_code: 200
       body:
         new_balance: !anyfloat
+
+  - name: Negative balance
+
+    # Request
+    request:
+      url: http://localhost:5000/withdraw
+      method: POST
+      json:
+        amount: 1000000
+
+    # Expected response code and body
+    response:
+      status_code: 403
+      body:
+        error: 'Cannot perform withdrawal. Balance would be below 0.'
 
 ---
 test_name: Check transactions endpoint
@@ -94,9 +109,9 @@ stages:
 
     # Request
     request:
-      url: http://127.0.0.1:5000/transactions
+      url: http://localhost:5000/transactions
       method: GET
 
-    # Expected response code and body
+    # Expected response code
     response:
       status_code: 200
