@@ -2,16 +2,19 @@ from flask_restful import Resource, reqparse
 from database.database_helper import DBHelper
 
 
+# /account endpoint. Returns the account balance.
 class Account(Resource):
     def get(self):
         return {'balance': DBHelper.get_balance()}
 
 
+# /transactions endpoint. Returns a list of transactions.
 class Transactions(Resource):
     def get(self):
         return DBHelper.get_transactions()
 
 
+# /deposit endpoint. Returns the amended balance after making a deposit.
 class Deposit(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('amount',
@@ -27,6 +30,7 @@ class Deposit(Resource):
         return transaction
 
 
+# /withdraw endpoint. Returns the amended balance after making a withdrawal.
 class Withdraw(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('amount',

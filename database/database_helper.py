@@ -2,6 +2,13 @@ import sqlite3
 import datetime
 
 
+# Notes:
+# This class I feel that, given more time, could have been implemented better.
+# Perhaps using SQLAlchemy. Unfortunately I designed everything around sql
+# and after looking at dynamodb I realised it wasn't fit to use with a nosql db.
+
+# Purpose:
+# Class to interface with the database.
 class DBHelper:
 
     @staticmethod

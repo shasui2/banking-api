@@ -1,4 +1,5 @@
 # https://tavern.readthedocs.io/en/latest/examples.html
+# These tests have been designed to test against a docker container.
 ---
 test_name: Check account endpoint.
 
