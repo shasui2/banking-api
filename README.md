@@ -14,7 +14,7 @@ date || credit || debit || balance
 ```
 #### My Thoughts and Processes
 My prior experience with python, serverless and dynamodb was almost nonexistent before doing this 
-project. As a result, a lot of the issues I faced were simply to to unfamiliarity with the language.
+project. As a result, a lot of the issues I faced were simply due to unfamiliarity with the language.
 For example, the code not being as dry as I would like it to be (see parsers in endpoints.py etc.).
 
 After reading through versions 1, 2 and 3 I immediately set out to create an api rather than 
