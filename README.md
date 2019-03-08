@@ -12,24 +12,13 @@ date || credit || debit || balance
 13/01/2012 || 2000.00 || || 3000.00
 10/01/2012 || 1000.00 || || 1000.00
 ```
-#### My Thoughts and Processes
-My prior experience with python, serverless and dynamodb was almost nonexistent before doing this 
-project. As a result, a lot of the issues I faced were simply due to unfamiliarity with the language.
-For example, the code not being as dry as I would like it to be (see parsers in endpoints.py etc.).
+#### TODO
 
-After reading through versions 1, 2 and 3 I immediately set out to create an api rather than 
-a console application. I employed the use of flask-restless to do this and an sqlite3 database. 
-After doing this I dockerised the application to ensure that it would run under the same conditions 
-anywhere. I created unit tests using tavern which provided an easy to read and maintainable 
-structure.
+Implement proper use of DynamoDB.
 
-It was at this point that I then started to look into serverless and dynamodb and realised that 
-my existing structure would not really play nice with either of them. So I created the 
-serverless_endpoints directory to utilise existing DB_Helper logic but in a serverless style.
-My attempt to implement this was purely local and not via aws. It is only intended to be proof
-of concept rather than a fully working implementation i.e. dynamodb is not actually used. 
-This was done due to time constraints as I have limited availability going forward. 
+Create a more substantial unit testing framework.
 
+Test on the cloud rather than locally.
 
 #### Flask Api Pre-requisites
 ```
